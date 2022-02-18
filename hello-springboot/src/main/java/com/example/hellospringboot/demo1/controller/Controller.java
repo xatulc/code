@@ -1,6 +1,6 @@
-package com.example.hellospringboot.controller;
+package com.example.hellospringboot.demo1.controller;
 
-import com.example.hellospringboot.service.Ihandle;
+import com.example.hellospringboot.demo1.service.Ihandle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;

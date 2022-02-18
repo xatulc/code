@@ -1,4 +1,4 @@
-package com.example.hellospringboot.service;
+package com.example.hellospringboot.demo1.service;
 
 /**
  * @author LC
