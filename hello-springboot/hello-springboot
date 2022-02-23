@@ -82,8 +82,58 @@ public class Controller {
 
 ```
 ## SpringBoot脚手架
+### SpringBoot集成kafka
+#### 1.快速生成一个SpringBoot项目，引入spring-kafka依赖
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+<!-- 引入 Spring-Kafka 依赖 -->
+<!-- 已经内置 kafka-clients 依赖，所以无需重复引入 -->
+<dependency>
+    <groupId>org.springframework.kafka</groupId>
+    <artifactId>spring-kafka</artifactId>
+</dependency>
+<!-- 实现对 JSON 的自动化配置 -->
+<!-- 因为，Kafka 对复杂对象的 Message 序列化时，我们会使用到 JSON -->
+<!--
+    同时，spring-boot-starter-json 引入了 spring-boot-starter ，而 spring-boot-starter 又引入了 spring-boot-autoconfigure 。
+    spring-boot-autoconfigure 实现了 Spring-Kafka 的自动化配置
+ -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-json</artifactId>
+</dependency>
+```
+spring-boot-starter-json如果发送的值需要序列化（对象），则引入
+#### 2.
+![](images/img.png)
 
-## SpringBoot其他使用
+## SpringBoot项目中使用
+### 配置文件的优先级
 
-## 其他记录（临时）
-#### Session和Cookie区别
+### 读取配置
+
+## 读源码
+查询所有的类，双击shift键，进行全局搜索。
+* KafkaProperties
+```java
+@ConfigurationProperties(
+    prefix = "spring.kafka"
+)
+public class KafkaProperties {
+    private List<String> bootstrapServers = new ArrayList(Collections.singletonList("localhost:9092"));
+    private String clientId;
+    private final Map<String, String> properties = new HashMap();
+    private final KafkaProperties.Consumer consumer = new KafkaProperties.Consumer();
+    private final KafkaProperties.Producer producer = new KafkaProperties.Producer();
+    private final KafkaProperties.Admin admin = new KafkaProperties.Admin();
+    private final KafkaProperties.Streams streams = new KafkaProperties.Streams();
+    private final KafkaProperties.Listener listener = new KafkaProperties.Listener();
+    private final KafkaProperties.Ssl ssl = new KafkaProperties.Ssl();
+    private final KafkaProperties.Jaas jaas = new KafkaProperties.Jaas();
+    private final KafkaProperties.Template template = new KafkaProperties.Template();
+    private final KafkaProperties.Security security = new KafkaProperties.Security();
+```
+在kafkaProperties
