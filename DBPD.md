@@ -43,3 +43,43 @@ session与cookie与JWT
 			JWT支持跨域认证
 				Session Cookies只能在单个节点的域或子域中有效。
 ```
+
+### @Resource和@Autowride
+```text
+@Resource和@Autowride
+	都是用来依赖注入的注解
+	@Resource
+		默认按名称注入 例如一个接口有多个实现类时，依赖注入就可以使用
+	@Autowride
+		类型优先，其次是@Qualifier约束，然后是按照名称，最后判断是否required
+		标记在构造函数
+			@Autowired如果目标Bean只定义一个构造函数，则不再需要在该构造函数上添加@Autowired注解。如果目标Bean有几个构造函数可用，并且没有主/默认构造函数，则必须至少有一个构造函数被@Autowired标记，以指示Spring IoC容器使用哪个构造函数。
+			现在只有一个构造函数，进行依赖注入可以省略@Autowride
+			@Component
+			public class Demo01Producer {
+			//    @Autowired
+			//    private KafkaTemplate<Object,Object> kafkaTemplate;
+
+			    private final KafkaTemplate<Object,Object> kafkaTemplate;
+
+			    public Demo01Producer(KafkaTemplate<Object, Object> kafkaTemplate) {
+			        this.kafkaTemplate = kafkaTemplate;
+			    }
+
+			    public SendResult syncSend(Integer id) throws ExecutionException, InterruptedException {
+			        //新建一条消息
+			        Demo01Message message = new Demo01Message();
+			        message.setId(id);
+			        ListenableFuture<SendResult<Object, Object>> send = kafkaTemplate.send(Demo01Message.TOPIC, message);
+			        //kafkaTemplate
+			        return send.get();
+			    }
+			}
+			如果再新增几个构造函数而不使用@Autowride指定使用那个构造器idea会报错
+		标注到成员变量
+			是我们经常使用的依赖注入的方式
+		标注到方法
+			例如某个方法来注入该对象
+		@Resource没有提供可选择装配的特性，如果无法装配，会直接抛出异常。而@Autowired有required属性，默认是required=true 表示注入时bean必须存在，false有直接注入，没有跳过，不会报错。
+	@Resource和@Autowired的优先级顺序不同（参见上图），另外@Resource属于 Jakarta EE规范而@Autowired属于Spring范畴，@Resource无法使用在构造参数中，@Autowired支持required属性。从面向对象来说，@Resource更加适用于多态性的细粒度注入，而@Autowired更多专注于单例。
+```
